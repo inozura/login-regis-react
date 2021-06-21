@@ -18,8 +18,9 @@ export const loginAPI = async (value) => {
 
 export const registerAPI = async (data) => {
   try {
-    await axios.post(`${BASE_URL}/api/auth/signup`, data)
+    const fetchApi = await axios.post(`${BASE_URL}/api/auth/signup`, data)
       .then(res => res);
+    return fetchApi;
   } catch (err) {
     return err;
   }

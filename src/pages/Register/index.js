@@ -19,7 +19,7 @@ const Login = ({history, handleLogin, isLogin, jwtToken}) => {
   const [errorDesc, setErrorDesc] = useState('');
 
   useEffect(() => {
-    // if(isLogin || jwtToken) return history.push('/dashboard');
+    if(isLogin || jwtToken) return history.push('/dashboard');
   }, [isLogin, jwtToken])
 
   const onFinishFailed = (errorInfo) => {
