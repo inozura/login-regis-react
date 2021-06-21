@@ -3,18 +3,24 @@ import axios from 'axios'
 
 const BASE_URL = 'http://94.103.87.212';
 
-export const login = async (data) => {
-  console.log('data', data);
-    await fetch(`${BASE_URL}/api/auth/login`, {
-      method: "POST",
-      body: data,
-    }).then(res => res.json())
-    .catch(err => err)
+export const loginAPI = async (value) => {
+  try {
+    const data = new FormData();
+    data.set('username', value.email);
+    data.set('password', value.password);
+
+    const fetchApi = await axios.post(`${BASE_URL}/api/auth/login`, data);
+    return fetchApi;
+  } catch (err) {
+    return err.response;
+  }
 }
 
-export const register = async (data) => {
-  await axios.post('http://94.103.87.212/api/auth/signup', data)
-  .then(res => {
-    return res;
-  }).catch(err => err)
+export const registerAPI = async (data) => {
+  try {
+    await axios.post(`${BASE_URL}/api/auth/signup`, data)
+      .then(res => res);
+  } catch (err) {
+    return err;
+  }
 }

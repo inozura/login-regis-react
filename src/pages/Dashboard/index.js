@@ -3,23 +3,22 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
-import {connect, useSelector} from 'react-redux';
-import { logout } from '../../configs/redux/actions/loginAction';
-
+import {connect} from 'react-redux';
+import { logout } from '../../configs/redux/actions/authAction';
+import { deleteLocalStorage } from '../../configs/localStorage';
+import {Redirect} from 'react-router-dom'
 const { Header, Content, Footer, Sider } = Layout;
 
-const SiderDemo = ({history, handleLogout}) => {
+const SiderDemo = ({history, handleLogout, isLogin, jwtToken}) => {
   const [collapsed, setCollapsed] = useState(false);
-  const {isLogin, jwtToken} = useSelector(state => state.auth);
 
   useEffect(() => {
-    if(!isLogin && !jwtToken) return history.push('/login');
-  }, [])
+    if(!isLogin || !jwtToken) {
+      return <Redirect to="/login" />
+    }
+  }, [isLogin, isLogin])
 
   const onCollapse = collapsed => {
     console.log(collapsed);
@@ -28,9 +27,9 @@ const SiderDemo = ({history, handleLogout}) => {
 
   // LOGOUT EVENT
   const handleButtonLogout = async () => {
-    localStorage.removeItem('jwtToken');
-    handleLogout()
-    history.push('/');
+    deleteLocalStorage('jwtToken');
+    handleLogout();
+    window.location.reload();
   }
 
   return (
@@ -71,11 +70,18 @@ const SiderDemo = ({history, handleLogout}) => {
   );
 }
 
-// REDUX CONNECT
+// REDUX CALL
+const mapStateToProps = state => {
+  return {
+    isLogin: state.auth.isLogin,
+    jwtToken: state.auth.jwtToken,
+  }
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     handleLogout: () => dispatch(logout()),
   }
 }
 
-export default connect(null, mapDispatchToProps) (SiderDemo);
+export default connect(mapStateToProps, mapDispatchToProps) (SiderDemo);

@@ -3,11 +3,12 @@ import { Row, Alert, Card, Form, Input, Button, Typography, Col } from 'antd';
 import {Fade} from 'react-reveal'
 import {Link} from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons';
-import { loginTrue } from '../../configs/redux/actions/loginAction';
+import { loginAction } from '../../configs/redux/actions/authAction';
 import { connect } from "react-redux";
 import axios from 'axios';
 
 import './Login.scss';
+import { loginAPI } from '../../configs/api/auth_api';
 
 const { Title } = Typography;
 
@@ -15,35 +16,29 @@ const Login = ({history, isLogin, jwtToken, handleLogin}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorDesc, setErrorDesc] = useState('');
-  const jwt = localStorage.getItem('jwtToken');
 
   useEffect(() => {
-    console.log(jwtToken);
     if(isLogin || jwtToken) return history.push('/dashboard');
-  }, [jwt])
+  }, [isLogin, jwtToken])
 
   // BUTTON SUBMIT EVENT
   const handleSubmit = async (event) => {
     if(event) {
       setIsLoading(true);
-      try {
-        const data = new FormData();
-        data.set('username', event.email);
-        data.set('password', event.password);
 
-        await axios.post('http://94.103.87.212/api/auth/login', data)
-        .then(async res => {
-          setIsLoading(false);
-          localStorage.setItem('jwtToken', res.data.access_token);
-          handleLogin(res.data.access_token);
-        });
-      } catch (err) {
-        setIsError(true);
-        setIsLoading(false);
-        setErrorDesc(err.response.data);
-      } finally {
-        history.push("/dashboard");
-      }
+      // API CALLING
+      await loginAPI(event)
+        .then(res => {
+          if(res.status === 200) {
+            setIsLoading(false);
+            localStorage.setItem('jwtToken', res.data.access_token);
+            handleLogin(res.data.access_token);
+          } else {
+            setIsError(true);
+            setIsLoading(false);
+            setErrorDesc(res.data.detail);
+          }
+      })
     }
   }
 
@@ -147,7 +142,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleLogin: (data) => dispatch(loginTrue(data)),
+    handleLogin: (data) => dispatch(loginAction(data)),
   }
 }
 

@@ -4,7 +4,8 @@ import {Fade} from 'react-reveal'
 import {Link} from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons';
 import { connect } from "react-redux";
-import { loginAction } from '../../configs/redux/actions/loginAction';
+import { loginTrue } from '../../configs/redux/actions/authAction';
+import { registerAPI } from '../../configs/api/auth_api';
 import axios from 'axios';
 
 import MainSVG from '../../assets/svg/undraw_Hello_re_3evm.svg';
@@ -18,8 +19,8 @@ const Login = ({history, handleLogin, isLogin, jwtToken}) => {
   const [errorDesc, setErrorDesc] = useState('');
 
   useEffect(() => {
-    if(isLogin || jwtToken) return history.push('/dashboard');
-  }, [])
+    // if(isLogin || jwtToken) return history.push('/dashboard');
+  }, [isLogin, jwtToken])
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -28,18 +29,18 @@ const Login = ({history, handleLogin, isLogin, jwtToken}) => {
   const handleButton = async (val) => {
     if(val) {
       setIsLoading(true);
-      try {
-        await axios.post('http://94.103.87.212/api/auth/signup', val)
-        .then(res => {
+
+      // CALLING API
+      await registerAPI(val).then(res => {
+        if(res.status === 200) {
           setIsLoading(false);
           handleLogin();
-          history.push("/dashboard");
-        });
-      } catch (err) {
-        setIsError(true);
-        setIsLoading(false);
-        setErrorDesc(err.response.data.detail)
-      }
+        } else {
+          setIsError(true);
+          setIsLoading(false);
+          setErrorDesc(res.response.data.detail)
+        }
+      })
     }
   }
 
@@ -165,7 +166,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleLogin: () => dispatch(loginAction()),
+    handleLogin: () => dispatch(loginTrue()),
   }
 }
 

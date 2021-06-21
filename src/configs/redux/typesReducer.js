@@ -1,3 +1,5 @@
-export const LOGINTRUE = 'LOGINTRUE';
+export const LOGINACTION = 'LOGINACTION';
 
-export const LOGINFALSE = 'LOGINFALSE';
+export const LOGOUTACTION = 'LOGINACTION';
+
+export const LOGINTRUE = 'LOGINTRUE';

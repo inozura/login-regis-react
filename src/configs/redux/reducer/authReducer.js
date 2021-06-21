@@ -1,4 +1,4 @@
-import { LOGINFALSE, LOGINTRUE } from '../typesReducer';
+import { LOGINACTION, LOGINTRUE, LOGOUTACTION } from '../typesReducer';
 
 const INITIAL_STATE = {
   isLogin: false,
@@ -11,10 +11,16 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state, 
         isLogin: true,
+      };
+
+    case LOGINACTION:
+      return {
+        ...state, 
+        isLogin: true,
         jwtToken: action.payload
       };
 
-    case LOGINFALSE:
+    case LOGOUTACTION:
       return {
         ...state, 
         isLogin: false,

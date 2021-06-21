@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import 'antd/dist/antd.css';
 import Router from './router';
 import { connect } from "react-redux";
-import { loginTrue } from "./configs/redux/actions/loginAction";
+import { loginAction } from "./configs/redux/actions/authAction";
 
 function App(props) {
 
@@ -30,7 +30,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleLogin: (data) => dispatch(loginTrue(data)),
+    handleLogin: (data) => dispatch(loginAction(data)),
   }
 }
 

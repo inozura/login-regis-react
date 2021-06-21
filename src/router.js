@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./utils/privateRoute";
 
 const history = createBrowserHistory({
   basename: process.env.PUBLIC_URL,
@@ -20,28 +21,14 @@ export default function router(props) {
         {props.children}
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/dashboard" component={Dashboard} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
 
           {/* PRIVATE ROUTE CONDITION */}
-          {
-            jwt ? (
-              <Route path="/dashboard" component={Dashboard} />
-            ) : (
-              <Redirect to='/login' />
-            )
-          }
-          {
-            jwt ? (
-              <Redirect to='/dashboard' />
-            ) : (
-              <>
-                <Route path="/login" component={Login} />
-                <Route path="/register" component={Register} />
-              </>
-            )
-          }
+          <PrivateRoute path="/dashboard">
+            <Dashboard />
+          </PrivateRoute>
+
         </Switch>
       </Router>
     </React.Suspense>
