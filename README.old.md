@@ -1,2 +1,0 @@
-# frontend
-React Redux based

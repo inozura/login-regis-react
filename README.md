@@ -31,3 +31,13 @@ frontend
 ┣ 📜package-lock.json
 ┗ 📜package.json
 ```
+
+### Production Command
+
+  Render with webpack
+
+  ```
+    yarn build
+  ```
+
+  The output is in the directory build when finished
