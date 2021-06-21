@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react'
-import { Row, Alert, Card, Form, Input, Button, Typography } from 'antd';
+import { Row, Alert, Card, Form, Input, Button, Typography, Col } from 'antd';
 import {Fade} from 'react-reveal'
-import axios from 'axios';
+import {Link} from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons';
 import { connect } from "react-redux";
 import { loginAction } from '../../configs/redux/actions/loginAction';
+import axios from 'axios';
+
+import MainSVG from '../../assets/svg/undraw_Hello_re_3evm.svg';
+import './Register.scss';
 
 const { Title } = Typography;
 
@@ -40,71 +44,93 @@ const Login = ({history, handleLogin, isLogin, jwtToken}) => {
   }
 
   return (
-    <Row justify="center" align="middle" style={{height: "100vh", overflow: "hidden"}}>
-      <Fade duration={900} bottom>
-        <Card style={{ width: 350, boxShadow: "0 14px 30px rgb(103 132 187 / 15%), 0 4px 4px rgb(103 132 187 / 5%)", borderRadius: 10 }}>
-          <Title level={2} style={{textAlign: "right"}}>Register</Title>
-          
-          <Form
-            layout="vertical"
-            name="basic"
-            initialValues={{ remember: true }}
-            onFinish={handleButton}
-            onFinishFailed={onFinishFailed}
-          >
+    <Row justify="center" align="middle" className="main__auth_row_register">
+      <Fade>
+        <Card className="main__auth_card">
+          <Row>
+            <Col span={12} className="left_main__auth_card"
+              style={{justifyContent: "center", alignItems: "center"}}
+            > 
+              <Fade duration={500} left>
+                <Title level={2} style={{color: "white"}}>Lorem Ipsum</Title>  
+              </Fade>
+              <Fade duration={500} right>
+                <img width={300} height={300} src={MainSVG} alt="social" />
+              </Fade>
+            </Col>
 
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]}
-              labelAlign="left"
-            >
-              <Input type="email" />
-            </Form.Item>
+            <Col span={12} md={12} xs={24} className="right_main__auth_card">
+              <Title level={2} style={{textAlign: "right"}}>Register</Title>
+              <Form
+                layout="vertical"
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={handleButton}
+                onFinishFailed={onFinishFailed}
+              >
 
-            <Form.Item
-              label="First Name"
-              name="first_name"
-              rules={[{ required: true, message: 'Please input your First Name!' }]}
-              labelAlign="left"
-            >
-              <Input />
-            </Form.Item>
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[{ required: true, message: 'Please input your email!' }]}
+                  labelAlign="left"
+                >
+                  <Input type="email" />
+                </Form.Item>
 
-            <Form.Item
-              label="Last Name"
-              name="last_name"
-              rules={[{ required: true, message: 'Please input your Last Name!' }]}
-              labelAlign="left"
-            >
-              <Input />
-            </Form.Item>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="First Name"
+                      name="first_name"
+                      rules={[{ required: true, message: 'Please input your First Name!' }]}
+                      labelAlign="left"
+                      style={{marginRight: 5}}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Last Name"
+                      name="last_name"
+                      rules={[{ required: true, message: 'Please input your Last Name!' }]}
+                      labelAlign="left"
+                      style={{marginLeft: 5}}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                </Row>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
-            >
-              <Input />
-            </Form.Item>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                  <Input />
+                </Form.Item>
 
-            <Form.Item
-              label="Repeat Password"
-              name="repeat_password"
-              rules={[{ required: true, message: 'Please input your Repeat password!' }]}
-            >
-              <Input />
-            </Form.Item>
+                <Form.Item
+                  label="Repeat Password"
+                  name="repeat_password"
+                  rules={[{ required: true, message: 'Please input your Repeat password!' }]}
+                >
+                  <Input />
+                </Form.Item>
 
-            <Form.Item>
-              <Row justify="center">
-                <Button type="primary" htmlType="submit" disabled={isLoading}>
-                  {isLoading ? <span><LoadingOutlined size={20} style={{color: "#ddd"}} /> Loading</span> : 'Submit'}
-                </Button>
-              </Row>
-            </Form.Item>
+                <Form.Item>
+                  <Row justify="center">
+                    <Button type="primary" htmlType="submit" disabled={isLoading} className="main__auth_button">
+                      {isLoading ? <span><LoadingOutlined size={20} style={{color: "#ddd"}} /> Loading</span> : 'Submit'}
+                    </Button>
+                  </Row>
+                </Form.Item>
 
-          </Form>
+                <p style={{textAlign: "center"}}>Already have an account? <Link to="/login">Sign In</Link></p>
+              </Form>
+            </Col>
+          </Row>
         </Card>
       </Fade>
 

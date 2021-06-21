@@ -1,12 +1,14 @@
-.main__auth_row {
+.main__auth_row_register {
   height: 100vh;
   overflow: hidden;
 
   .main__auth_card {
-    width: 700px;
+    width: 900px;
     box-shadow: 0 14px 30px rgb(103 132 187 / 15%), 0 4px 4px rgb(103 132 187 / 5%);
     border-radius: 10px;
     overflow: hidden;
+    background-color: #0d7ce4;
+    padding: 20px;
   }
   
   .ant-card-body {
@@ -15,7 +17,6 @@
   
   .left_main__auth_card {
     display: flex;
-    background-color: #0d7ce4;
     padding: 40px !important;
     overflow: hidden;
   }
@@ -42,6 +43,8 @@
   
   .right_main__auth_card {
     padding: 40px !important;
+    background-color: white;
+    border-radius: 20px;
   }
   
   .main__auth_button {
@@ -52,10 +55,15 @@
     .left_main__auth_card {
       display: none;
     }
+    .right_main__auth_card {
+      border-radius: unset !important;
+    }
     .main__auth_card {
       width: 350px;
       box-shadow: 0 14px 30px rgb(103 132 187 / 15%), 0 4px 4px rgb(103 132 187 / 5%);
-      border-radius: 10px
+      border-radius: 10px;
+      padding: unset !important;
+      background-color: white;
     }
   }
 }
