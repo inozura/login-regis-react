@@ -1,5 +1,11 @@
 import { LOGINFALSE, LOGINTRUE } from '../typesReducer';
 
+export const loginAction = () => {
+  return {
+    type: LOGINTRUE,
+  };
+};
+
 export const loginTrue = (data) => {
   return {
     type: LOGINTRUE,
@@ -7,9 +13,8 @@ export const loginTrue = (data) => {
   };
 };
 
-export const loginFalse = (data) => {
+export const logout = (data) => {
   return {
-    type: LOGINFALSE,
-    payload: data
+    type: LOGINFALSE
   };
 };

@@ -6,10 +6,11 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { login } from '../../configs/api/auth_api';
 import { loginTrue } from '../../configs/redux/actions/loginAction';
 import axios from 'axios';
+import { connect } from "react-redux";
 
 const { Title } = Typography;
 
-const Login = ({history}) => {
+const Login = ({history, isLogin, jwtToken, handleLogin}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorDesc, setErrorDesc] = useState('');
@@ -19,27 +20,30 @@ const Login = ({history}) => {
   const jwt = localStorage.getItem('jwtToken');
 
   useEffect(() => {
-    if(jwt) return history.push('/dashboard');
+    console.log(jwtToken);
+    if(isLogin || jwtToken) return history.push('/dashboard');
   }, [jwt])
 
   const handleSubmit = async (event) => {
-    if(email && password) {
+    if(event) {
       setIsLoading(true);
       try {
         const data = new FormData();
-        data.set('username', email);
-        data.set('password', password);
+        data.set('username', event.email);
+        data.set('password', event.password);
 
         await axios.post('http://94.103.87.212/api/auth/login', data)
         .then(async res => {
           setIsLoading(false);
-          console.log(res.data)
+          console.log(res.data);
           localStorage.setItem('jwtToken', res.data.access_token);
-        })
+          handleLogin(res.data.access_token);
+          console.log(jwtToken);
+        });
       } catch (err) {
         setIsError(true);
         setIsLoading(false);
-        setErrorDesc(err.response.data.detail)
+        setErrorDesc(err.response.data.detail);
         console.log('error', err.response.data);
       } finally {
         history.push("/dashboard");
@@ -86,6 +90,7 @@ const Login = ({history}) => {
         </Card>
       </Fade>
 
+      {/* ALERT */}
       {
         isError && (
           <Alert
@@ -107,4 +112,17 @@ const Login = ({history}) => {
   )
 }
 
-export default Login
+const mapStateToProps = state => {
+  return {
+    isLogin: state.auth.isLogin,
+    jwtToken: state.auth.jwtToken,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleLogin: (data) => dispatch(loginTrue(data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

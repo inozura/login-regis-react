@@ -1,21 +1,20 @@
 import React, {useState, useEffect} from 'react'
 import { Row, Alert, Card, Form, Input, Button, Typography } from 'antd';
 import {Fade} from 'react-reveal'
-import { Link } from "react-router-dom";
 import axios from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
+import { connect } from "react-redux";
+import { loginAction } from '../../configs/redux/actions/loginAction';
 
 const { Title } = Typography;
 
-const Login = ({history}) => {
+const Login = ({history, handleLogin, isLogin, jwtToken}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorDesc, setErrorDesc] = useState('');
 
-  const jwt = localStorage.getItem('jwtToken');
-
   useEffect(() => {
-    if(jwt) return history.push('/dashboard');
+    if(isLogin || jwtToken) return history.push('/dashboard');
   }, [])
 
   const onFinishFailed = (errorInfo) => {
@@ -30,6 +29,7 @@ const Login = ({history}) => {
         .then(res => {
           setIsLoading(false);
           console.log(res.data);
+          handleLogin();
           // localStorage.setItem('jwtToken', res.data.access_token);
           history.push("/dashboard");
         });
@@ -132,4 +132,17 @@ const Login = ({history}) => {
   )
 }
 
-export default Login
+const mapStateToProps = state => {
+  return {
+    isLogin: state.auth.isLogin,
+    jwtToken: state.auth.jwtToken,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleLogin: () => dispatch(loginAction()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

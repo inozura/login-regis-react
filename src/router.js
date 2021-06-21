@@ -24,7 +24,7 @@ export default function router(props) {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
 
-          {/* {
+          {
             jwt ? (
               <Route path="/dashboard" component={Dashboard} />
             ) : (
@@ -40,7 +40,7 @@ export default function router(props) {
                 <Route path="/register" component={Register} />
               </>
             )
-          } */}
+          }
         </Switch>
       </Router>
     </React.Suspense>

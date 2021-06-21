@@ -8,26 +8,29 @@ import {
   UserOutlined,
   LogoutOutlined
 } from '@ant-design/icons';
+import {connect, useSelector} from 'react-redux';
+import { logout } from '../../configs/redux/actions/loginAction';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-const SiderDemo = ({history}) => {
+const SiderDemo = ({history, handleLogout}) => {
   const [collapsed, setCollapsed] = useState(false);
   
-  const jwt = localStorage.getItem('jwtToken');
+  const {isLogin, jwtToken} = useSelector(state => state.auth);
 
-  // useEffect(() => {
-  //   if(!jwt) return history.push('/login');
-  // }, [])
+  useEffect(() => {
+    if(!isLogin && !jwtToken) return history.push('/login');
+  }, [])
 
   const onCollapse = collapsed => {
     console.log(collapsed);
     setCollapsed({ collapsed });
   };
 
-  const handleLogout = async () => {
+  const handleButtonLogout = async () => {
     localStorage.removeItem('jwtToken');
+    handleLogout()
     history.push('/');
   }
 
@@ -54,7 +57,7 @@ const SiderDemo = ({history}) => {
           <Menu.Item key="9" icon={<FileOutlined />}>
             Files
           </Menu.Item>
-          <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => handleLogout()}>
+          <Menu.Item key="10" icon={<LogoutOutlined />} onClick={() => handleButtonLogout()}>
             Logout
           </Menu.Item>
         </Menu>
@@ -77,4 +80,10 @@ const SiderDemo = ({history}) => {
   );
 }
 
-export default SiderDemo;
+const mapDispatchToProps = dispatch => {
+  return {
+    handleLogout: () => dispatch(logout()),
+  }
+}
+
+export default connect(null, mapDispatchToProps) (SiderDemo);
