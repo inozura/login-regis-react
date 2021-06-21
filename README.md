@@ -13,6 +13,7 @@
 
 ### Directory
 
+```
 frontend
 ┣ 📂public
 ┣ 📂src
@@ -28,4 +29,4 @@ frontend
 ┣ 📜README.md
 ┣ 📜package-lock.json
 ┗ 📜package.json
-
+```
