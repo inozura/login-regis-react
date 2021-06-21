@@ -17,6 +17,7 @@
 frontend
 ┣ 📂public
 ┣ 📂src
+┃ ┗ 📂assets // all assets used
 ┃ ┗ 📂components // molecules of parts components
 ┃ ┗ 📂configs // config redux and other
 ┃ ┗ 📂pages // pages component 
