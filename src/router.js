@@ -24,6 +24,7 @@ export default function router(props) {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
 
+          {/* PRIVATE ROUTE CONDITION */}
           {
             jwt ? (
               <Route path="/dashboard" component={Dashboard} />

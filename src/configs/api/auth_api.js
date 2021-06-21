@@ -11,3 +11,10 @@ export const login = async (data) => {
     }).then(res => res.json())
     .catch(err => err)
 }
+
+export const register = async (data) => {
+  await axios.post('http://94.103.87.212/api/auth/signup', data)
+  .then(res => {
+    return res;
+  }).catch(err => err)
+}

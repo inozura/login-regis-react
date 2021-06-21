@@ -24,21 +24,17 @@ const Login = ({history, handleLogin, isLogin, jwtToken}) => {
   const handleButton = async (val) => {
     if(val) {
       setIsLoading(true);
-      try {  
+      try {
         await axios.post('http://94.103.87.212/api/auth/signup', val)
         .then(res => {
           setIsLoading(false);
-          console.log(res.data);
           handleLogin();
-          // localStorage.setItem('jwtToken', res.data.access_token);
           history.push("/dashboard");
         });
-
       } catch (err) {
         setIsError(true);
         setIsLoading(false);
         setErrorDesc(err.response.data.detail)
-        console.log('error', err.response.data);
       }
     }
   }
@@ -107,10 +103,12 @@ const Login = ({history, handleLogin, isLogin, jwtToken}) => {
                 </Button>
               </Row>
             </Form.Item>
+
           </Form>
         </Card>
       </Fade>
 
+      {/* ALERT COMPONENT */}
       {
         isError && (
           <Alert

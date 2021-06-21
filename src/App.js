@@ -1,13 +1,14 @@
 import React, {useEffect} from "react";
 import 'antd/dist/antd.css';
-import Router from './router'
-import { connect } from "react-redux"
+import Router from './router';
+import { connect } from "react-redux";
 import { loginTrue } from "./configs/redux/actions/loginAction";
 
 function App(props) {
 
   const jwt = localStorage.getItem('jwtToken');
 
+  // CHECK IF THE USER HAVE SESSION LOGIN
   useEffect(() => {
     if(jwt) return props.handleLogin(jwt);
   }, [])
@@ -19,6 +20,7 @@ function App(props) {
   );
 }
 
+// REDUX CALL
 const mapStateToProps = state => {
   return {
     isLogin: state.auth.isLogin,

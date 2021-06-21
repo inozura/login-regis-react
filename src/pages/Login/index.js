@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import { Row, Alert, Card, Form, Input, Button, Typography } from 'antd';
+import { Row, Alert, Card, Form, Input, Button, Typography, Col } from 'antd';
 import {Fade} from 'react-reveal'
-import { Link, Redirect } from "react-router-dom";
+import {Link} from 'react-router-dom'
 import { LoadingOutlined } from '@ant-design/icons';
-import { login } from '../../configs/api/auth_api';
 import { loginTrue } from '../../configs/redux/actions/loginAction';
-import axios from 'axios';
 import { connect } from "react-redux";
+import axios from 'axios';
+
+import './Login.scss';
 
 const { Title } = Typography;
 
@@ -14,9 +15,6 @@ const Login = ({history, isLogin, jwtToken, handleLogin}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorDesc, setErrorDesc] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
   const jwt = localStorage.getItem('jwtToken');
 
   useEffect(() => {
@@ -24,6 +22,7 @@ const Login = ({history, isLogin, jwtToken, handleLogin}) => {
     if(isLogin || jwtToken) return history.push('/dashboard');
   }, [jwt])
 
+  // BUTTON SUBMIT EVENT
   const handleSubmit = async (event) => {
     if(event) {
       setIsLoading(true);
@@ -35,16 +34,13 @@ const Login = ({history, isLogin, jwtToken, handleLogin}) => {
         await axios.post('http://94.103.87.212/api/auth/login', data)
         .then(async res => {
           setIsLoading(false);
-          console.log(res.data);
           localStorage.setItem('jwtToken', res.data.access_token);
           handleLogin(res.data.access_token);
-          console.log(jwtToken);
         });
       } catch (err) {
         setIsError(true);
         setIsLoading(false);
-        setErrorDesc(err.response.data.detail);
-        console.log('error', err.response.data);
+        setErrorDesc(err.response.data);
       } finally {
         history.push("/dashboard");
       }
@@ -52,41 +48,70 @@ const Login = ({history, isLogin, jwtToken, handleLogin}) => {
   }
 
   return (
-    <Row justify="center" align="middle" style={{height: "100vh", overflow: "hidden"}}>
-      <Fade duration={900} bottom>
-        <Card style={{ width: 350, boxShadow: "0 14px 30px rgb(103 132 187 / 15%), 0 4px 4px rgb(103 132 187 / 5%)", borderRadius: 10 }}>
-          <Title level={2} style={{textAlign: "right"}}>Login</Title>
-          <Form
-            layout="vertical"
-            name="basic"
-            initialValues={{ remember: true }}
-            onFinish={handleSubmit}
-          >
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]}
-              labelAlign="left"
-            >
-              <Input type="email" onChange={(text) => setEmail(text.target.value)} />
-            </Form.Item>
+    <Row justify="center" align="middle" className="main__auth_row">
+      <Fade>
+        <Card className="main__auth_card">
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
-            >
-              <Input.Password onChange={(text) => setPassword(text.target.value)} />
-            </Form.Item>
+          {/* CONTENT CARD */}
+          <Row>
+            <Col span={10} className="left_main__auth_card">
+              <Fade duration={500} right top>
+                <div className="bottom1_div__animate" />
+              </Fade>
+              <Fade duration={500} bottom>
+                <div className="bottom2_div__animate" />
+              </Fade>
+              <Title level={2} style={{textAlign: "right", color: "white", zIndex: 9}}>Lorem Ipsum</Title>
+            </Col>
 
-            <Form.Item>
-              <Row justify="center">
-                <Button type="primary" htmlType="submit" disabled={isLoading} onClick={() => handleSubmit()}>
-                  {isLoading ? <span><LoadingOutlined size={20} style={{color: "#ddd"}} /> Loading</span> : 'Submit'}
-                </Button>
-              </Row>
-            </Form.Item>
-          </Form>
+            <Col span={14} md={14} xs={24} className="right_main__auth_card">
+              <Title level={2} style={{textAlign: "right"}}>Login</Title>
+              <Form
+                layout="vertical"
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={handleSubmit}
+              >
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[{ required: true, message: 'Please input your email!' }]}
+                  labelAlign="left"
+                >
+                  <Input type="email" />
+                </Form.Item>
+
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                  <Input.Password />
+                </Form.Item>
+
+                <Form.Item>
+                  <Row justify="center">
+                    <Button 
+                      type="primary" 
+                      htmlType="submit" 
+                      disabled={isLoading} 
+                      onClick={() => handleSubmit()}
+                      className="main__auth_button"
+                    >
+                      { 
+                        isLoading ?
+                          (<span><LoadingOutlined size={20} style={{color: "#ddd"}} /> Loading</span>) 
+                        : 'Submit'
+                      }
+                    </Button>
+                  </Row>
+                </Form.Item>
+
+                <p style={{textAlign: "center"}}>Don't have an account? <Link to="/register">Sign Up</Link></p>
+              </Form>
+            </Col>
+          </Row>
+
         </Card>
       </Fade>
 
@@ -112,6 +137,7 @@ const Login = ({history, isLogin, jwtToken, handleLogin}) => {
   )
 }
 
+// REDUX CALL
 const mapStateToProps = state => {
   return {
     isLogin: state.auth.isLogin,
